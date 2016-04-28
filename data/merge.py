@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+#
+# This python file merges the airline data and the weather data for any particular year
+# Author - Prateek & Nishant
+#
+# Input year from command line
+# Usage : python merge.py <year>
+
 import sys
 import csv
 from sets import Set
@@ -8,6 +16,9 @@ plm = ""
 toolbar_width = 40
 
 class bcolors:
+    '''
+    Class bcolor used for printing pretty messages
+    '''
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKGREEN = '\033[92m'
@@ -17,28 +28,33 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+# Time difference between times a and b
 def time_diff(a, b):
     mina = int(a/100)*60 + (a%100)
     minb = int(b/100)*60 + (b%100)
     return abs(mina-minb)
 
+# Check for arg
 if len(sys.argv) < 2:
     message = bcolors.BOLD + "Usage: python merge.py <year>" + bcolors.ENDC
     sys.exit(message)
 
 input_year = sys.argv[1]
 
+# Validity of year
 if int(input_year) < 1997 or int(input_year) > 2006:
     message = bcolors.FAIL + "Error: year should be in [1997, 2006]" + bcolors.ENDC
     sys.exit(message)
 
 
-
+#log file
 logfile = input_year + 'log.log'
 logging.basicConfig(filename=logfile, level=logging.DEBUG)
 
+# Airline file name
 airline_file_name = 'airline_data/' + input_year + '.csv'
 
+# merged file name
 merged_file_name = 'merged' + input_year + '.csv'
 merged_file = open(merged_file_name, 'wb')
 
@@ -48,23 +64,27 @@ except:
     message = bcolors.FAIL + "airline data file " + airline_file_name + " does not exist" + bcolors.ENDC
     sys.exit(message)
 
+
 merged_file_writer = csv.writer(merged_file)
 
 wban_code = {}
 weather_data = {}
 
+# returns a progress string denoted by progress
 def progress_string(reps):
     s = ""
     for i in range(0, reps):
         s += '-'
     return s
 
+# Initialize the toolbar
 def toolbar_init(message):
     # setup toolbar
     sys.stdout.write("%s: [%s]" % (message, " " * toolbar_width))
     sys.stdout.flush()
     sys.stdout.write("\b" * (toolbar_width+1)) # return to start of line, after '['
 
+# Makes the progress bar
 def make_progress(toolbar_accum, prev_toolbar_accum):
     sys.stdout.write("\b" * (prev_toolbar_accum)) # return to start of line, after '['
     sys.stdout.write(progress_string(int(toolbar_accum)))
@@ -74,8 +94,9 @@ def make_progress(toolbar_accum, prev_toolbar_accum):
 toolbar_init("Building wban map")
 toolbar_accum = 0
 prev_toolbar_accum = 0
+
+# read the station code file to create the wban map
 for i in range(1, 12):
-    time.sleep(0.1)
     toolbar_accum += toolbar_width*1.0/12
     make_progress(toolbar_accum, prev_toolbar_accum)
     prev_toolbar_accum = int(toolbar_accum)
@@ -93,16 +114,18 @@ for i in range(1, 12):
         sys.exit(message)
 
     lines = map_file.readlines()
+    # create wban map
     for i in range(1, len(lines)):
         items = lines[i].split('|')
         wban_code[items[2]] = int(items[0])
     map_file.close()
-    
+# print progress    
 make_progress(toolbar_width, prev_toolbar_accum)
 prev_toolbar_accum = 0
 sys.stdout.write("\n")
 
 
+# create map file
 mpfile = open('mapfile.txt', 'w')
 mpfile.write(str(wban_code))
 mpfile.close()
@@ -115,6 +138,8 @@ done = False
 
 start = 1
 num_items_processed = 0
+
+# Start the merging process for each month
 for i in range(1, 13):
 
     weather_data = {}
@@ -127,6 +152,7 @@ for i in range(1, 13):
     if(i < 10):
         num = '0' + num
 
+    # take hourly data
     hourly_file_name = path + num + '/' + input_year + num + 'hourly.txt'
     try:
         hourly_file = open(hourly_file_name)
@@ -135,16 +161,17 @@ for i in range(1, 13):
         sys.exit(message)
 
     toolbar_init("Processing for " + hourly_file_name)
-    #print("Processing: ", hourly_file_name)
     toolbar_accum = 0
     prev_toolbar_accum = 0
 
+    #read hourly file
     lines = hourly_file.read().splitlines()
     hourly_file.close()
     
     headings = lines[0].split(',')
 
     cnt = 0
+    # read the heading
     for item in headings:
         if cnt < 2:
             cnt+=1
