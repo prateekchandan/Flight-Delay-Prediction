@@ -241,8 +241,8 @@ for i in range(1, 13):
                     least_diff = diff
                     closest = lst
             except Exception,e:
-                print str(e)
-                message = "conversion to int weather file: " + lst[0] + " ,airline file: " + items[5]
+                #print str(e)
+                message = "conversion to int weather file: " + lst[0] + " ,airline file: " + items[5] + " " + str(e)
                 if message != plm:
                      logging.error(message)
                 plm = message
@@ -285,8 +285,8 @@ for i in range(1, 13):
                     least_diff = diff
                     closest = lst
             except Exception,e:
-                print str(e)
-                message = "conversion to int weather file: " + lst[0] + " ,airline file: " + items[7]
+                #print str(e)
+                message = "conversion to int weather file: " + lst[0] + " ,airline file: " + items[7] + " " + str(e)
                 if message != plm:
                      logging.error(message)
                 plm = message
