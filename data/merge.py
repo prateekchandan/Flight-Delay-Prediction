@@ -18,8 +18,8 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 def time_diff(a, b):
-    mina = (a/100)*60 + (a%100)
-    minb = (b/100)*60 + (b%100)
+    mina = int(a/100)*60 + (a%100)
+    minb = int(b/100)*60 + (b%100)
     return abs(mina-minb)
 
 if len(sys.argv) < 2:
@@ -236,10 +236,12 @@ for i in range(1, 13):
         closest = []
         for lst in l:
             try:
-                if time_diff(int(lst[0]), int(items[5])) < least_diff:
-                    least_diff = abs(int(lst[0]) - int(items[5]))
+                diff = time_diff(int(lst[0]), int(items[5]))
+                if diff < least_diff:
+                    least_diff = diff
                     closest = lst
-            except:
+            except Exception,e:
+                print str(e)
                 message = "conversion to int weather file: " + lst[0] + " ,airline file: " + items[5]
                 if message != plm:
                      logging.error(message)
@@ -277,11 +279,14 @@ for i in range(1, 13):
         closest = []
         for lst in l:
             try:
-                if time_diff(int(lst[0]) - int(items[5])) < least_diff:
-                    least_diff = abs(int(lst[0]) - int(items[5]))
+                diff = time_diff(int(lst[0]), int(items[7]))
+                #print diff
+                if diff < least_diff:
+                    least_diff = diff
                     closest = lst
-            except:
-                message = "conversion to int weather file: " + lst[0] + " ,airline file: " + items[5]
+            except Exception,e:
+                print str(e)
+                message = "conversion to int weather file: " + lst[0] + " ,airline file: " + items[7]
                 if message != plm:
                      logging.error(message)
                 plm = message
