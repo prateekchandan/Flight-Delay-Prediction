@@ -1,8 +1,13 @@
 #!/bin/bash
+#!/bin/bash
+
+# This script downloads and then unzips the airline data and stores it in the airline folder
+# Author: Prateek & Nishant
+
+# create new folder
 mkdir -p weather
 
 #downloading data
-
 for i in `seq 1997 2006`
 do
 	for j in `seq 1 12`
@@ -15,7 +20,6 @@ do
 		path="./weather/"$filename
 		if [ ! -f $path ];then
 			url="http://www.ncdc.noaa.gov/orders/qclcd/"$filename
-			#echo $url $path
 			wget -O $path $url &
 		fi
 	done
