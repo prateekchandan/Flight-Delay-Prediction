@@ -23,11 +23,32 @@ except:
     message = bcolors.FAIL + "expects integer second argument" + bcolors.ENDC
     sys.exit(message)
 
+def progress_string(reps):
+    s = ""
+    for i in range(0, reps):
+        s += '='
+    return bcolors.OKGREEN + s + bcolors.ENDC
+
+def toolbar_init(message):
+    # setup toolbar
+    message = bcolors.OKBLUE + message + bcolors.ENDC
+    sys.stdout.write("%s: [%s]" % (message, " " * toolbar_width))
+    sys.stdout.flush()
+    sys.stdout.write("\b" * (toolbar_width+1)) # return to start of line, after '['
+
+def make_progress(toolbar_accum, prev_toolbar_accum):
+    sys.stdout.write("\b" * (prev_toolbar_accum)) # return to start of line, after '['
+    sys.stdout.write(progress_string(int(toolbar_accum)))
+    sys.stdout.flush()
+
+
 outputfile = open('randomoutput.csv', 'wb')
     
 lines_file = int(reqd/(len(sys.argv)-2))
 print "lines per file: " + str(lines_file)
 done = False
+
+toolbar_width = 30
 
 for i in range(2, len(sys.argv)):
     print i
@@ -40,12 +61,23 @@ for i in range(2, len(sys.argv)):
     num_lines = 0
     first_line = ""
     first = True
+
+    toolbar_init("Finding number of lines")
+    toolbar_accum = 0
+    prev_toolbar_accum = 0
     for line in csvfile:
+        toolbar_accum += toolbar_width*1.0/6500000
+        make_progress(toolbar_accum, prev_toolbar_accum)
+        prev_toolbar_accum = int(toolbar_accum)
         if first:
             first_line = line
             first = False
         num_lines += 1
+    make_progress(toolbar_width, prev_toolbar_accum)
+    prev_toolbar_accum = 0
+    sys.stdout.write("\n")
     csvfile.close()
+    
     
     #random_list = random.sample(range(1, num_lines), lines_file)
     #print random_list
@@ -61,14 +93,21 @@ for i in range(2, len(sys.argv)):
 
     p = lines_file*1.0/num_lines
     num_written = 0
-    print "picking random lines"
+    toolbar_init("Picking random lines")
+    toolbar_accum = 0
+    prev_toolbar_accum = 0
     for line in csvfile:
         #print line
-        
+        toolbar_accum += toolbar_width*1.0/num_lines
+        make_progress(toolbar_accum, prev_toolbar_accum)
+        prev_toolbar_accum = int(toolbar_accum)
         rand = np.random.uniform()
         if rand <= p:
             outputfile.write(line)
             num_written += 1
+    make_progress(toolbar_width, prev_toolbar_accum)
+    prev_toolbar_accum = 0
+    sys.stdout.write("\n")
     print "Number of lines written: " + str(num_written)
 
     csvfile.close()
