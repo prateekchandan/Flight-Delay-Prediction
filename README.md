@@ -26,7 +26,9 @@ The following python libraries are used in our code base and are required in thi
 
 
 ##Data File Fileds
+
 Note: The fileds with * are used in our training model
+
 1.	*Year	1987-2008
 2.	*Month	1-12
 3.	DayofMonth	1-31
