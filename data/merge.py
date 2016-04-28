@@ -230,9 +230,16 @@ for i in range(1, 13):
         least_diff = 10000
         closest = []
         for lst in l:
-            if abs(int(lst[0]) - int(items[5])) < least_diff:
-                least_diff = abs(int(lst[0]) - int(items[5]))
-                closest = lst
+            try:
+                if abs(int(lst[0]) - int(items[5])) < least_diff:
+                    least_diff = abs(int(lst[0]) - int(items[5]))
+                    closest = lst
+            except:
+                message = "conversion to int weather file: " + lst[0] + " ,airline file: " + items[5]
+                if message != plm:
+                     logging.error(message)
+                plm = message
+                continue
 
         try:
             items.extend(closest)
