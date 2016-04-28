@@ -17,6 +17,11 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+def time_diff(a, b):
+    mina = (a/100)*60 + (a%100)
+    minb = (b/100)*60 + (b%100)
+    return abs(mina-minb)
+
 if len(sys.argv) < 2:
     message = bcolors.BOLD + "Usage: python merge.py <year>" + bcolors.ENDC
     sys.exit(message)
@@ -227,11 +232,11 @@ for i in range(1, 13):
             plm = message
             continue
         
-        least_diff = 10000
+        least_diff = 1000000
         closest = []
         for lst in l:
             try:
-                if abs(int(lst[0]) - int(items[5])) < least_diff:
+                if time_diff(int(lst[0]), int(items[5])) < least_diff:
                     least_diff = abs(int(lst[0]) - int(items[5]))
                     closest = lst
             except:
@@ -271,9 +276,16 @@ for i in range(1, 13):
         least_diff = 10000
         closest = []
         for lst in l:
-            if abs(int(lst[0]) - int(items[5])) < least_diff:
-                least_diff = abs(int(lst[0]) - int(items[5]))
-                closest = lst
+            try:
+                if time_diff(int(lst[0]) - int(items[5])) < least_diff:
+                    least_diff = abs(int(lst[0]) - int(items[5]))
+                    closest = lst
+            except:
+                message = "conversion to int weather file: " + lst[0] + " ,airline file: " + items[5]
+                if message != plm:
+                     logging.error(message)
+                plm = message
+                continue
 
         try:
             items.extend(closest)
