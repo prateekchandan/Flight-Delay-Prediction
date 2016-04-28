@@ -42,7 +42,7 @@ def make_progress(toolbar_accum, prev_toolbar_accum):
     sys.stdout.flush()
 
 
-outputfile = open('randomoutput.csv', 'wb')
+outputfile = open('randomoutput_'+str(reqd)+'.csv', 'wb')
     
 lines_file = int(reqd/(len(sys.argv)-2))
 print "lines per file: " + str(lines_file)
