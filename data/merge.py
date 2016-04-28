@@ -91,7 +91,8 @@ for i in range(1, 12):
     for i in range(1, len(lines)):
         items = lines[i].split('|')
         wban_code[items[2]] = int(items[0])
-
+    map_file.close()
+    
 make_progress(toolbar_width, prev_toolbar_accum)
 prev_toolbar_accum = 0
 sys.stdout.write("\n")
@@ -99,9 +100,11 @@ sys.stdout.write("\n")
 
 mpfile = open('mapfile.txt', 'w')
 mpfile.write(str(wban_code))
-
+mpfile.close()
 
 airline_lines = airline_file.read().splitlines()
+airline_file.close()
+
 header = airline_lines[0].split(',')
 done = False
 
@@ -130,8 +133,10 @@ for i in range(1, 13):
     #print("Processing: ", hourly_file_name)
     toolbar_accum = 0
     prev_toolbar_accum = 0
-    lines = hourly_file.read().splitlines()
 
+    lines = hourly_file.read().splitlines()
+    hourly_file.close()
+    
     headings = lines[0].split(',')
 
     cnt = 0
@@ -276,6 +281,8 @@ for i in range(1, 13):
         merged_file_writer.writerow(items)
     make_progress(toolbar_width, prev_toolbar_accum)
     sys.stdout.write('\n')
+
     print("total items processed till now: ", num_items_processed)
     start = num_items_processed+1
-        
+
+merged_file.close()
