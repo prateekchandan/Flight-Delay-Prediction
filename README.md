@@ -1,13 +1,32 @@
 # Flight-Delay-Prediction
 
-#Team Members
+##Team Members
 
 1. Prateek Chandan (120050042)
 2. Nishant Kumar Singh (120050043)
 3. Maninder
 
-#Data File Fileds
+## How to Run
 
+To run the complete code base. Run the following bash file
+
+   `./run.sh`
+  
+##Requirements
+Language : **Python2.7**
+Operating System : **Linux** 
+Memory Requirement : *~40GB of free space*
+The following python libraries are used in our code base and are required in this project
+
+* pandas
+* sklearn
+* numpy
+* scipy
+* csv
+
+
+##Data File Fileds
+Note: The fileds with * are used in our training model
 1.	*Year	1987-2008
 2.	*Month	1-12
 3.	DayofMonth	1-31
@@ -75,3 +94,18 @@
 65. *dest  Sea Level Pressure
 66. dest  Record Type
 67. dest  Precip. Total
+
+##Data Source
+
+We have used the following data sets:
+
+1. [**Statistical Computing & Statistical Graphics​** ](http://stat­computing.org/dataexpo/2009/the­data.html​) .This data is taken from the Research and Technology Administration (RITA) database and  structured for our use. But the above dataset doesn’t have any information related to weather conditions at the origin and destination airports.
+2. For weather data we have: 
+[**Hourly land­based weather observations from NOAA​**](http://cdo.ncdc.noaa.gov/qclcd_ascii/​) .This source contains hourly and daily data of weather at various airports.
+
+## References
+1. http://stat­computing.org/dataexpo/2009/the­data.html
+2. http://cdo.ncdc.noaa.gov/qclcd_ascii/
+3. https://www.scipy.org/
+4. http://scikit-learn.org/
+5. http://www.google.com
