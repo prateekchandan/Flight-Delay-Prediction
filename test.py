@@ -8,8 +8,24 @@ import cPickle
 from sklearn import tree
 from sklearn import cross_validation
 
+# Class bcolors
+class bcolors:
+    '''
+    Class bcolor used for printing pretty messages
+    '''
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+# Check for arg correctoness
 if len(sys.argv) < 2:
-    print "Usage: python test.py <input file>"
+    message = bcolors.BOLD + "Usage: python test.py <input file>" + bcolors.ENDC
+    sys.exit(message)
 
 filename = sys.argv[1]
 inp = open(filename, 'rb')
