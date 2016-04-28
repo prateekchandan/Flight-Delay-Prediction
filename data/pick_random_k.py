@@ -1,6 +1,7 @@
 import sys
 import csv
 import random
+import numpy as np
 
 class bcolors:
     HEADER = '\033[95m'
@@ -36,14 +37,42 @@ for i in range(2, len(sys.argv)):
         message = bcolors.FAIL + "csv data file " + csvfile + " does not exist" + bcolors.ENDC
         sys.exit(message)
 
-    csvfile_lines = csvfile.readlines()
-    random_choice = random.sample(csvfile_lines[1:], lines_file)
+    num_lines = 0
+    first_line = ""
+    first = True
+    for line in csvfile:
+        if first:
+            first_line = line
+            first = False
+        num_lines += 1
     csvfile.close()
-
+    
+    #random_list = random.sample(range(1, num_lines), lines_file)
+    #print random_list
     if not(done):
         done = True
-        outputfile.write(csvfile_lines[0])
+        outputfile.write(first_line)
+
+    try:
+        csvfile = open(sys.argv[i], 'rb')
+    except:
+        message = bcolors.FAIL + "csv data file " + csvfile + " does not exist" + bcolors.ENDC
+        sys.exit(message)
+
+    p = lines_file*1.0/num_lines
+    num_written = 0
+    print "picking random lines"
+    for line in csvfile:
+        #print line
         
-    outputfile.write("".join(random_choice))
+        rand = np.random.uniform()
+        if rand <= p:
+            outputfile.write(line)
+            num_written += 1
+    print "Number of lines written: " + str(num_written)
+
+    csvfile.close()
+
+outputfile.close()
     
     
