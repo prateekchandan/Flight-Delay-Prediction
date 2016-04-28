@@ -52,3 +52,6 @@ cd ../
 echo "Training data now"
 python train.py ./data/filtered_1000000.py
 
+echo "The model is trained now.."
+echo "You may now test the data using python test.py"
+
